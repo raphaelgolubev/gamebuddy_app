@@ -1,19 +1,29 @@
+""" Точка входа в приложение """
+
 import uvicorn
 import uvicorn.config
 
 from fastapi import FastAPI
 
-from config import UVICORN_HOST, UVICORN_PORT, UVICORN_LOG_LEVEL, UVICORN_RELOAD, UVICORN_RELOAD_DIRS
+from config import AppSettings, UvicornSettings
 
-app = FastAPI(title="Soyamate", description="A simple API for Soyamate")
+app = FastAPI(
+    title="Soyamate", 
+    description="A simple API for Soyamate",
+    version=AppSettings.APP_VERSION.value
+)
+
+@app.get(AppSettings.prefix('ping'))
+def ping():
+    return "pong"
 
 if __name__ == "__main__":
     # первая находка: аргумент reload работает только в методе uvicorn.run()
+    # вторая находка: для доступа к значению перечисления, нужно обращаться к value
     uvicorn.run(
         "main:app", 
-        host=UVICORN_HOST, 
-        port=UVICORN_PORT, 
-        log_level=UVICORN_LOG_LEVEL, 
-        reload=UVICORN_RELOAD, 
-        reload_dirs=UVICORN_RELOAD_DIRS
+        host=UvicornSettings.HOST.value, 
+        port=UvicornSettings.PORT.value, 
+        log_level=UvicornSettings.LOG_LEVEL.value, 
+        reload=UvicornSettings.RELOAD.value, 
     )
