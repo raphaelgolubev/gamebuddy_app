@@ -4,11 +4,15 @@ import uvicorn
 from fastapi import FastAPI
 from config import AppSettings, UvicornSettings
 
+from routers import main_router
+
 app = FastAPI(
     title="Soyamate", 
     description="A simple API for Soyamate",
     version=AppSettings.APP_VERSION.value
 )
+
+app.include_router(main_router, prefix=AppSettings.API_URL.value)
 
 
 @app.get(AppSettings.prefix('ping'))

@@ -16,8 +16,9 @@ class AppSettings(Enum):
     API_VERSION = "v1"
     API_URL = f"{API_PATH}/{API_VERSION}"
 
+    @staticmethod
     def prefix(method: str = "") -> str:
-        """ 
+        """
         Возвращает путь к методу API с указанным именем.
         Если метод не передан, то возвращает путь к API.
         """
