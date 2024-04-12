@@ -10,6 +10,8 @@
 - ``docker down -v`` - удалить все контейнеры и volumes
 - ``docker images`` - список всех контейнеров
 - ``${VARIABLE_NAME}`` - в ``docker-compose.yml`` таким образом можно указать переменные из файла ``.env``
+### Postgres
+- ``docker exec -it <id контейнера postgres> psql -U postgres`` - провалиться внутрь postgres контейнера
 
 ## Чекнуть
 - dev контейнеры в vscode чекнуть

@@ -18,11 +18,6 @@ async_session = sessionmaker(
 )
 
 
-class TestTable(Base):
-    __tablename__ = 'test_table'
-    id = Column(Integer, primary_key=True)
-
-
 async def create_tables() -> None:
     async with engine_async.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
