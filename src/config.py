@@ -35,3 +35,13 @@ class UvicornSettings(Enum):
     HOST = os.environ.get("UVICORN_HOST")
     PORT = int(os.environ.get("UVICORN_PORT"))
     LOG_LEVEL = os.environ.get("UVICORN_LOG_LEVEL")
+
+
+class DatabaseSettings(Enum):
+    """ Перечисление параметров конфигурации базы данных """
+    HOST = os.environ.get("DB_HOST")
+    PORT = int(os.environ.get("DB_PORT"))
+    NAME = os.environ.get("DB_NAME")
+    USER = os.environ.get("DB_USER")
+    PASSWORD = os.environ.get("DB_PASSWORD")
+    URL = f"postgresql+asyncpg://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}"

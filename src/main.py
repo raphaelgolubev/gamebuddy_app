@@ -1,22 +1,35 @@
 """ Точка входа в приложение """
 
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
 from config import AppSettings, UvicornSettings
 
 from routers import main_router
+import database
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # startup
+    await database.create_tables()
+    yield
+    # shutdown
+
 
 app = FastAPI(
     title="Soyamate", 
     description="A simple API for Soyamate",
-    version=AppSettings.APP_VERSION.value
+    version=AppSettings.APP_VERSION.value,
+    lifespan=lifespan
 )
 
 app.include_router(main_router, prefix=AppSettings.API_URL.value)
 
 
 @app.get(AppSettings.prefix('ping'))
-def ping():
+def ping(): 
     return "pong"
 
 
