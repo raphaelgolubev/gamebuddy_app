@@ -5,3 +5,15 @@
 - [Техническое задание](/docs/APP.md) 
 
 ``TODO: оформить readme.md``
+
+
+## USAGE:
+```bash
+python .
+```
+
+or
+
+```bash
+docker-compose up --build -d
+```
