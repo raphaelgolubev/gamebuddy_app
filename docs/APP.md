@@ -36,9 +36,9 @@ sequenceDiagram
 
     actor U as User
     box transparent Сервер
-        participant S as Server
-        participant App as FastAPI
-        participant DB as Database
+        participant S as Веб сервер
+        participant App as Приложение
+        participant DB as База данных
     end
 
     
@@ -47,8 +47,10 @@ sequenceDiagram
     U ->> S: Отправляет данные для регистрации
     Note over U,S: email = 'user@user.com'<br/>password = '123'
 
+    activate App
     S ->> App: Данные отправляются в route
 
+    activate DB
     App --> DB: Устанавливает соединение
     App ->> DB: SELECT * FROM User WHERE email = 'user@user.com'
     Note over App,DB: Получаем все записи из таблицы с таким email
@@ -61,6 +63,7 @@ sequenceDiagram
         App ->> DB: Создай новую запись в таблице User
         Note over App, DB: id = 1, email = 'user@user.com', password: 'sXhsuxn7ysbX'
         DB ->> App: Возвращает созданную запись
+        deactivate DB
         App ->> App: Формирует JSON<br/> {'id': 1, 'email': 'user@user.com'}
         App ->> S: Возвращает JSON
         S ->> U: Вернул 200 OK и JSON
@@ -68,11 +71,12 @@ sequenceDiagram
     else БД вернула не пустой список
       rect rgb(250, 57, 57)
         App ->> S: HTTPException 409: Такой пользователь уже существует
+        deactivate App
         S ->> U: Вернул 409 и JSON с деталями ошибки
+        deactivate S
       end
     end
 
-    deactivate S
 ```
 Пользователь отправляет данные для регистрации: Пользователь отправляет свои учетные данные (например, имя пользователя, пароль) на сервер.
 
