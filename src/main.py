@@ -18,8 +18,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="gamebuddy", 
-    description="A simple API for gamebuddy",
+    title="GameBuddy", 
+    description="A simple API for GameBuddy",
     version=AppSettings.APP_VERSION.value,
     lifespan=lifespan
 )
