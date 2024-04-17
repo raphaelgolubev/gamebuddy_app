@@ -1,4 +1,4 @@
-class SoyamateApp:
+class GameBuddyApp:
     def __init__():
         pass
 

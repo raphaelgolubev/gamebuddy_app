@@ -18,8 +18,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Soyamate", 
-    description="A simple API for Soyamate",
+    title="gamebuddy", 
+    description="A simple API for gamebuddy",
     version=AppSettings.APP_VERSION.value,
     lifespan=lifespan
 )

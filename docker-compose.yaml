@@ -13,17 +13,17 @@ services:
     ports:
       - "5432:5432" # Проброс порта 5432 (стандартный порт PostgreSQL) с хоста на контейнер
 
-  soyamate_app:
-    container_name: soyamate_app
+  gamebuddy_app:
+    container_name: gamebuddy_app
     build: . # Путь к каталогу с Dockerfile, из которого будет собираться контейнер
-    # image: soyamate_app:latest
+    # image: gamebuddy_app:latest
     restart: always
     ports:
       - "8000:8000" # Проброс порта 8000 (стандартный порт uvicorn) с хоста на контейнер
     depends_on:
       - postgres # гарантированно запустит контейнер postgres перед запуском текущего
     volumes: # Использование томов позволяет сохранять данные даже после остановки контейнера.
-      - .:/soyamate_app # 
+      - .:/gamebuddy_app # 
 
 volumes:
-  soyamate_app:
+  gamebuddy_app:

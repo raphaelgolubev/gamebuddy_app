@@ -1,3 +1,3 @@
-from src.core.application import SoyamateApp
+from src.core.application import gamebuddyApp
 
-__all__ = ("SoyamateApp",)
+__all__ = ("GameBuddyApp",)
