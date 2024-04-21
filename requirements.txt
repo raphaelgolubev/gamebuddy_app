@@ -2,6 +2,7 @@ annotated-types==0.6.0
 anyio==4.3.0
 async-timeout==4.0.3
 asyncpg==0.29.0
+attrs==23.2.0
 black==24.4.0
 certifi==2024.2.2
 click==8.1.7
@@ -9,6 +10,7 @@ dnspython==2.6.1
 email_validator==2.1.1
 fastapi==0.110.1
 flake8==7.0.0
+flake8-bugbear==24.2.6
 Flake8-pyproject==1.2.3
 greenlet==3.0.3
 h11==0.14.0
@@ -25,6 +27,7 @@ mypy-extensions==1.0.0
 orjson==3.10.0
 packaging==24.0
 pathspec==0.12.1
+pep8-naming==0.13.3
 platformdirs==4.2.0
 pycodestyle==2.11.1
 pydantic==2.7.0
