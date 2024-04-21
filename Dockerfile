@@ -7,16 +7,16 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # В файловой системе контейнера создаем папку с приложением
-WORKDIR /soymate_app
+WORKDIR /gamebuddy_app
 
 # Копируем зависимости
-COPY requirements.txt /soymate_app/requirements.txt
+COPY requirements.txt /gamebuddy_app/requirements.txt
 
 # Апгрейд pip и установка зависимостей
 RUN pip install -U pip && pip install --no-cache-dir -r requirements.txt
 
 # Копировать все из текущего каталога в папку с приложением в контейнере
-COPY . /soymate_app
+COPY . /gamebuddy_app
 
 # Запускаем main.py, внутри которого запускается uvicorn
 CMD [ "python", "src/main.py" ]
