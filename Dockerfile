@@ -19,4 +19,4 @@ RUN pip install -U pip && pip install --no-cache-dir -r requirements.txt
 COPY . /gamebuddy_app
 
 # Запускаем main.py, внутри которого запускается uvicorn
-CMD [ "python", "src/main.py" ]
+CMD [ "python", "__main__.py" ]
