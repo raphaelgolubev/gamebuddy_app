@@ -1,47 +1,47 @@
 """ Конфигурация приложения """
-
-from dotenv import load_dotenv
-import os
-
-from enum import Enum
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-load_dotenv()
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file='.env', 
+        env_file_encoding='utf-8',
+        case_sensitive=False,
+        extra='allow'
+    )
 
 
-class AppSettings(Enum):
-    """ Перечисление параметров конфигурации приложения """
-    APP_VERSION = "0.0.1"
-    API_PATH = "/api"
-    API_VERSION = "v1"
-    API_URL = f"{API_PATH}/{API_VERSION}"
-
-    @staticmethod
-    def prefix(method: str = "") -> str:
-        """
-        Возвращает путь к методу API с указанным именем.
-        Если метод не передан, то возвращает путь к API.
-        """
-
-        if method:
-            return f"{AppSettings.API_URL.value}/{method}"
-
-        return AppSettings.API_URL.value
+class AppSettings(Settings):
+    """ Класс конфигурации приложения """
+    APP_VERSION: str = "0.0.1"
+    API_PATH: str = "/api"
+    API_VERSION: str = "v1"
+    API_URL: str = f"{API_PATH}/{API_VERSION}"
 
 
-class UvicornSettings(Enum):
+class UvicornSettings(Settings):
     """ Перечисление параметров конфигурации uvicorn """
-    RELOAD = os.environ.get("UVICORN_RELOAD")
-    HOST = os.environ.get("UVICORN_HOST")
-    PORT = int(os.environ.get("UVICORN_PORT"))
-    LOG_LEVEL = os.environ.get("UVICORN_LOG_LEVEL")
+    RELOAD: str = Field(alias='uvicorn_reload')
+    HOST: str = Field(alias='uvicorn_host')
+    PORT: int = Field(alias='uvicorn_port')
+    LOG_LEVEL: str = Field(alias='uvicorn_log_level')
 
 
-class DatabaseSettings(Enum):
+class DatabaseSettings(Settings):
     """ Перечисление параметров конфигурации базы данных """
-    HOST = os.environ.get("DB_HOST")
-    PORT = int(os.environ.get("DB_PORT"))
-    NAME = os.environ.get("DB_NAME")
-    USER = os.environ.get("DB_USER")
-    PASSWORD = os.environ.get("DB_PASSWORD")
-    URL = f"postgresql+asyncpg://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}"
+    HOST: str = Field(alias='db_host')
+    PORT: int = Field(alias='db_port')
+    NAME: str = Field(alias='db_name')
+    USER: str = Field(alias='db_user')
+    PASSWORD: str = Field(alias='db_password')
+
+    @property
+    def asyncpg_url(self) -> str:
+        """ Возвращает URL для подключения к базе данных """
+        return f"postgresql+asyncpg://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.NAME}"
+
+
+app_settings = AppSettings()
+uvicorn_settings = UvicornSettings()
+database_settings = DatabaseSettings()
