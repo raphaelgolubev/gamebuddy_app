@@ -22,7 +22,6 @@ class AppSettings(Settings):
 
 class UvicornSettings(Settings):
     """ Перечисление параметров конфигурации uvicorn """
-    RELOAD: str = Field(alias='uvicorn_reload')
     HOST: str = Field(alias='uvicorn_host')
     PORT: int = Field(alias='uvicorn_port')
     LOG_LEVEL: str = Field(alias='uvicorn_log_level')

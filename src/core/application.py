@@ -1,21 +1,53 @@
+import uvicorn
+from fastapi import FastAPI
+
+from src.config import app_settings, uvicorn_settings
+from src.database import create_tables
+
+
 class GameBuddyApp:
-    def __init__():
-        pass
+    """ Объект, управляющий жизненным циклом приложения """
+    fastapi_app: FastAPI
 
-    def _build_fastapi():
-        """ Инитить фастапи приложение можно тут,
-        так у нас получится дополнительный слой абстракции где мы можем инитить БД
-        или ещё что то делать и избавимся по ситу от lifespan который выгляит так себе чесговоря) """
-        pass
+    def __init__(self):
+        self._build_fastapi()
+        self.setup()
 
-    def setup():
-        """ Тут вот можно инитить БД например """
-        pass
+    def _build_fastapi(self):
+        self.fastapi_app = FastAPI(
+            title="GameBuddy", 
+            description="A simple API for GameBuddy",
+            version=app_settings.APP_VERSION
+        )
 
-    def run():
-        """ Ну тут понятно) """
+    def setup(self):
         pass
+        # create_tables()
 
-    def shutdown():
+    def run(self, debug_mode=False):
+        """ 
+        ### Описание
+        Запускает сервер, который будет принимать запросы на API.
+
+        ### Параметры:
+            - `debug_mode: Bool` 
+                - `True` - передает в `uvicorn.run` строку пути к экземпляру приложения
+                - `False` - передает в `uvicorn.run` сам экземпляр приложения, что гарантирует выключение `reload`,
+                  даже если `reload=True` (так работает uvicorn).
+        """
+        instance: FastAPI | str = "src.core.application:gamebuddy_app.fastapi_app" if debug_mode else self.fastapi_app
+
+        uvicorn.run(
+            instance,
+            host=uvicorn_settings.HOST,
+            port=uvicorn_settings.PORT,
+            log_level=uvicorn_settings.LOG_LEVEL,
+            reload=debug_mode,
+        )
+
+    def shutdown(self):
         """ А тут закрывать коннекты к БД напрмер """
         pass
+
+
+gamebuddy_app = GameBuddyApp()

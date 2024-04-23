@@ -1,3 +1,3 @@
-from src.core.application import gamebuddyApp
+from src.core.application import GameBuddyApp
 
 __all__ = ("GameBuddyApp",)
