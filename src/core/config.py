@@ -11,7 +11,6 @@ model_config = SettingsConfigDict(
 
 
 class Settings:
-    """ Класс конфигурации приложения """
 
     def __init__(self):
         self.app = Settings.AppSettings()
