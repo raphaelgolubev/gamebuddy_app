@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
-from core.config import database_settings
+from core.config import settings
 
 
 class Base(DeclarativeBase):
@@ -23,7 +23,7 @@ class Annotations:
 
 
 async_engine = create_async_engine(
-    database_settings.asyncpg_url, 
+    settings.database.asyncpg_url, 
     echo=True,
     pool_size=10,
     max_overflow=10,

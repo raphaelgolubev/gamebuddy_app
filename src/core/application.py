@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from core.config import app_settings, uvicorn_settings
+from core.config import settings
 from core.database import create_tables
 
 
@@ -17,7 +17,7 @@ class GameBuddyApp:
         self.fastapi_app = FastAPI(
             title="GameBuddy", 
             description="A simple API for GameBuddy",
-            version=app_settings.APP_VERSION
+            version=settings.app.APP_VERSION
         )
 
     def setup(self):
@@ -39,9 +39,9 @@ class GameBuddyApp:
 
         uvicorn.run(
             instance,
-            host=uvicorn_settings.HOST,
-            port=uvicorn_settings.PORT,
-            log_level=uvicorn_settings.LOG_LEVEL,
+            host=settings.uvicorn.HOST,
+            port=settings.uvicorn.PORT,
+            log_level=settings.uvicorn.LOG_LEVEL,
             reload=debug_mode,
         )
 
