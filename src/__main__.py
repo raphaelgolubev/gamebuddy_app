@@ -1,5 +1,5 @@
 """ Точка входа в приложение """
-from src.core.application import gamebuddy_app
+from core.application import gamebuddy_app
 
 
 if __name__ == "__main__":

@@ -53,4 +53,4 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Копировать все из текущего каталога в папку с приложением в контейнере
 COPY . .
 # Запускаем main.py, внутри которого запускается uvicorn
-CMD [ "python", "__main__.py" ]
+CMD [ "python", "src/__main__.py" ]

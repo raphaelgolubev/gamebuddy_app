@@ -1,7 +1,7 @@
 from enum import Enum
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.database import Base, Annotations
+from core.database import Base, Annotations
 
 
 class Role(Enum):

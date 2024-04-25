@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
-from src.config import database_settings
+from core.config import database_settings
 
 
 class Base(DeclarativeBase):

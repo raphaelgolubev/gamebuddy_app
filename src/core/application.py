@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 
-from src.config import app_settings, uvicorn_settings
-from src.database import create_tables
+from core.config import app_settings, uvicorn_settings
+from core.database import create_tables
 
 
 class GameBuddyApp:
@@ -35,7 +35,7 @@ class GameBuddyApp:
                 - `False` - передает в `uvicorn.run` сам экземпляр приложения, что гарантирует выключение `reload`,
                   даже если `reload=True` (так работает uvicorn).
         """
-        instance: FastAPI | str = "src.core.application:gamebuddy_app.fastapi_app" if debug_mode else self.fastapi_app
+        instance: FastAPI | str = "core.application:gamebuddy_app.fastapi_app" if debug_mode else self.fastapi_app
 
         uvicorn.run(
             instance,
