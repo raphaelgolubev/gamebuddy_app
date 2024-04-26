@@ -1,4 +1,5 @@
 """ Точка входа в приложение """
+
 import sys
 
 from core.application import gamebuddy_app

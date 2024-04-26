@@ -1,19 +1,19 @@
 from enum import Enum
 
-from sqlalchemy.orm import (Mapped, mapped_column)
+from sqlalchemy.orm import Mapped, mapped_column
 
-from core.database import (Annotations, Base)
+from core.database import Annotations, Base
 
 
 class Role(Enum):
-    GUEST = 'GUEST'
-    USER = 'USER'
-    MODERATOR = 'MODERATOR'
-    ADMIN = 'ADMIN'
+    GUEST = "GUEST"
+    USER = "USER"
+    MODERATOR = "MODERATOR"
+    ADMIN = "ADMIN"
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id: Mapped[Annotations.primary_id]
     role: Mapped[Role] = mapped_column(default=Role.USER)

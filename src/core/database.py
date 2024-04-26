@@ -3,8 +3,8 @@ from typing import Annotated
 from uuid import UUID
 
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import (async_sessionmaker, create_async_engine)
-from sqlalchemy.orm import (DeclarativeBase, mapped_column)
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, mapped_column
 
 from core.config import settings
 
@@ -14,17 +14,17 @@ class Base(DeclarativeBase):
 
 
 class Annotations:
-    """ Класс с аннотациями для переиспользуемости кода в объявлении таблиц """
+    """Класс с аннотациями для переиспользуемости кода в объявлении таблиц"""
+
     primary_id = Annotated[UUID, mapped_column(primary_key=True)]
     created_at = Annotated[datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"))]
-    updated_at = Annotated[datetime, mapped_column(
-        server_default=text("TIMEZONE('utc', now())"), 
-        onupdate=text("TIMEZONE('utc', now())")
-    )]
+    updated_at = Annotated[
+        datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"), onupdate=text("TIMEZONE('utc', now())"))
+    ]
 
 
 async_engine = create_async_engine(
-    settings.database.asyncpg_url, 
+    settings.database.asyncpg_url,
     echo=True,
     pool_size=10,
     max_overflow=10,

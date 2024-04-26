@@ -6,7 +6,8 @@ from core.database import create_tables
 
 
 class GameBuddyApp:
-    """ Объект, управляющий жизненным циклом приложения """
+    """Объект, управляющий жизненным циклом приложения"""
+
     fastapi_app: FastAPI
 
     def __init__(self):
@@ -15,9 +16,7 @@ class GameBuddyApp:
 
     def _build_fastapi(self):
         self.fastapi_app = FastAPI(
-            title="GameBuddy", 
-            description="A simple API for GameBuddy",
-            version=settings.app.APP_VERSION
+            title="GameBuddy", description="A simple API for GameBuddy", version=settings.app.APP_VERSION
         )
 
     def setup(self):
@@ -25,12 +24,12 @@ class GameBuddyApp:
         # create_tables()
 
     def run(self, debug_mode=False):
-        """ 
+        """
         ### Описание
         Запускает сервер, который будет принимать запросы на API.
 
         ### Параметры:
-            - `debug_mode: Bool` 
+            - `debug_mode: Bool`
                 - `True` - передает в `uvicorn.run` строку пути к экземпляру приложения
                 - `False` - передает в `uvicorn.run` сам экземпляр приложения, что гарантирует выключение `reload`,
                   даже если `reload=True` (так работает uvicorn).
@@ -46,7 +45,7 @@ class GameBuddyApp:
         )
 
     def shutdown(self):
-        """ А тут закрывать коннекты к БД напрмер """
+        """А тут закрывать коннекты к БД напрмер"""
         pass
 
 
