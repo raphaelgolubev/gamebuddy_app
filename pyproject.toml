@@ -1,6 +1,7 @@
 [tool.isort]
 line_length = 120
 force_grid_wrap = 2
+src_paths = ["src"]
 
 [tool.black]
 line-length = 120
