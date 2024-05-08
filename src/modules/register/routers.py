@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from .schemas import RegisterIn
 
 
-router = APIRouter(prefix="/register", tags=["Регистрация"])
+router = APIRouter()
 
 
 @router.post("/create")
