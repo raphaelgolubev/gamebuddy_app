@@ -9,7 +9,6 @@ model_config = SettingsConfigDict(
 
 
 class Settings:
-
     def __init__(self):
         self.app = Settings.AppSettings()
         self.uvicorn = Settings.UvicornSettings()
@@ -26,7 +25,7 @@ class Settings:
         model_config = model_config
 
     class UvicornSettings(BaseSettings):
-        """Перечисление параметров конфигурации uvicorn"""
+        """Класс конфигурации uvicorn"""
 
         HOST: str = Field(alias="uvicorn_host")
         PORT: int = Field(alias="uvicorn_port")
@@ -35,7 +34,7 @@ class Settings:
         model_config = model_config
 
     class DatabaseSettings(BaseSettings):
-        """Перечисление параметров конфигурации базы данных"""
+        """Класс конфигурации базы данных"""
 
         HOST: str = Field(alias="db_host")
         PORT: int = Field(alias="db_port")

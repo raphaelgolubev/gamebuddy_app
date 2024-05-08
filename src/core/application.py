@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from core.config import settings
 from core.database import create_tables
 
+from core.routing import main_router
+
 
 class GameBuddyApp:
     """Объект, управляющий жизненным циклом приложения"""
@@ -20,6 +22,8 @@ class GameBuddyApp:
             description="A simple API for GameBuddy",
             version=settings.app.APP_VERSION,
         )
+
+        self.fastapi_app.include_router(main_router)
 
     def setup(self):
         pass
