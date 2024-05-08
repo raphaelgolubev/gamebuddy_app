@@ -70,6 +70,7 @@ class GameBuddyApp:
 
 gamebuddy_app = GameBuddyApp()
 
+# =============== SWAGGER UI ===============
 
 app = gamebuddy_app.fastapi_app
 app.mount("/static", StaticFiles(directory="static"), name="static")
