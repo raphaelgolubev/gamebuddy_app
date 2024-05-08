@@ -1,6 +1,6 @@
 # https://testdriven.io/blog/docker-best-practices/
 
-version: '3.8'  # Версия синтаксиса Docker Compose, используемая в этом файле
+# version: '3.8' # строка устарела # Версия синтаксиса Docker Compose, используемая в этом файле
 services:
   postgres:
     container_name: postgres_14
