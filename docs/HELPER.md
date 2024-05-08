@@ -20,15 +20,15 @@
 
 
 ## Работа с Docker
+- ``docker-compose up --build`` - собрать и запустить контейнеры
+- ``docker ps -a`` - список всех контейнеров
+- ``docker images`` - список всех контейнеров
 - ``docker history <id образа>`` - показать историю изменений образа
 - ``docker system prune`` - почистить копии контейнеров и кэш
-- ``docker ps -a`` - список всех контейнеров
-- ``docker-compose up --build`` - собрать и запустить контейнеры
 - ``docker exec -it <id контейнера> bash <команда>`` - запуск команды
 - ``docker exec -it <id контейнера> python -c "import sys; print(sys.path)"`` - проверить пути
 - ``docker-compose down`` - удалить контейнеры
 - ``docker-compose down -v`` - удалить все контейнеры и volumes
-- ``docker images`` - список всех контейнеров
 - ``${VARIABLE_NAME}`` - в ``docker-compose.yml`` таким образом можно указать переменные из файла ``.env``
 
 ### Postgres
