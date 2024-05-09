@@ -1,5 +1,6 @@
+import time
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 from core.docs import Docs, AppMetadata
 from core.config import settings
@@ -64,7 +65,6 @@ class GameBuddyApp:
 
 
 gamebuddy_app = GameBuddyApp()
-
 
 # =============== SWAGGER UI ===============
 
