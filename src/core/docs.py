@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 
 from fastapi.openapi.docs import (
     get_redoc_html,
@@ -44,3 +44,42 @@ class Docs:
             title=self.fastapi_app.title + " - ReDoc",
             redoc_js_url="/static/redoc.standalone.js",
         )
+
+
+class AppMetadata:
+    """Метаданные для Swagger"""
+
+    title = "GameBuddy"
+    summary = "Сервис поиска тиммейтов для сетевых видеоигр"
+    description = """
+## Содержание
+* [Регистрация](https://github.com/raphaelgolubev/gamebuddy_app/blob/main/docs/Register.md)
+* [Авторизация](https://github.com/raphaelgolubev/gamebuddy_app/blob/main/docs/Login.md)
+* [Аутентификация](https://github.com/raphaelgolubev/gamebuddy_app/blob/main/docs/Auth.md)
+
+## Коды ошибок
+### Регистрация
+* 1000 - регистрация
+* 1001 - пользователь с таким email уже существует
+* 1002 - пользователь не найден
+* 1003 - код верификации неверный
+* 1004 - время действия кода истекло
+
+### Авторизация
+* 2000 - авторизация
+
+### Аутентификация
+* 3000 - аутентификация
+
+"""
+
+    tags = [
+        {
+            "name": "Регистрация",
+            "description": "Методы для регистрации нового пользователя",
+            "externalDocs": {
+                "description": "Ссылка на полную документацию",
+                "url": "https://github.com/raphaelgolubev/gamebuddy_app/blob/main/docs/Register.md"
+            }
+        }
+    ]

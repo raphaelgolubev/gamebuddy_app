@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from core.docs import Docs
+from core.docs import Docs, AppMetadata
 from core.config import settings
 from core.database import create_tables
 from core.routing import main_router
@@ -20,8 +20,10 @@ class GameBuddyApp:
         self.fastapi_app = FastAPI(
             docs_url=None,  # отключаем дефолтные доки
             redoc_url=None,
-            title="GameBuddy",
-            summary="A simple API for GameBuddy",
+            title=AppMetadata.title,
+            summary=AppMetadata.summary,
+            description=AppMetadata.description,
+            openapi_tags=AppMetadata.tags,
             version=settings.app.APP_VERSION,
         )
 
