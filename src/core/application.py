@@ -1,10 +1,11 @@
 import time
-import uvicorn
-from fastapi import FastAPI, Request
 
-from core.docs import Docs, AppMetadata
+import uvicorn
+from fastapi import (FastAPI, Request)
+
 from core.config import settings
 from core.database import create_tables
+from core.docs import (AppMetadata, Docs)
 from core.routing import main_router
 
 
@@ -76,7 +77,7 @@ async def custom_swagger_ui():
     return docs.get_swagger_ui_html()
 
 
-@docs.fastapi_app.get(docs.fastapi_app.swagger_ui_oauth2_redirect_url, include_in_schema=False)
+@docs.fastapi_app.get(docs.fastapi_app.swagger_ui_oauth2_redirect_url, include_in_schema=False)  # type: ignore
 async def swagger_ui_redirect():
     return docs.get_swagger_ui_oauth2_redirect_html()
 
