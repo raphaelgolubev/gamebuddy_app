@@ -1,0 +1,11 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.mypyEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
+    "explorer.excludeGitIgnore": false,
+    "search.useGlobalIgnoreFiles": false,
+    "search.useParentIgnoreFiles": false,
+    "search.useIgnoreFiles": false
+}

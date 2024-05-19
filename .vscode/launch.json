@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Gamebuddy configuration",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "src/__main__.py",
+            // "module": "uvicorn",
+            "console": "integratedTerminal",
+            "python": "${command:python.interpreterPath}",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--debug"
+            ],
+            "justMyCode": true,
+            "presentation": {
+                "hidden": false,
+                "group": "Gamebuddy group",
+                "order": 1
+            },
+            "autoReload": {
+                "enable": true
+            },
+        }
+    ]
+}
