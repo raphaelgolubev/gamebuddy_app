@@ -1,19 +1,21 @@
 # https://testdriven.io/blog/docker-best-practices/
 
-# version: '3.8' # строка устарела # Версия синтаксиса Docker Compose, используемая в этом файле
+version: '3.8' # Версия синтаксиса Docker Compose, используемая в этом файле
 services:
   postgres:
     container_name: postgres_14
     image: postgres:latest # Используемый образ Docker для контейнера PostgreSQL
     restart: always # Перезапускать контейнер в случае его выхода из строя
-    # env_file: # Путь к файлу с переменными окружения, который будет передаваться в контейнер
-    #   - .env
+    env_file: # Путь к файлу с переменными окружения, который будет передаваться в контейнер
+      - .env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432" # Проброс порта 5432 (стандартный порт PostgreSQL) с хоста на контейнер
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Том для хранения данных PostgreSQL
 
   gamebuddy_app:
     container_name: gamebuddy_app
@@ -27,5 +29,5 @@ services:
     # volumes: # Использование томов позволяет сохранять данные даже после остановки контейнера.
     #   - .:/gamebuddy_app # 
 
-# volumes:
-#   gamebuddy_app:
+volumes:
+  postgres_data:
