@@ -1,10 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
-from src.core.config import settings
-from src.core.database import create_tables
-from src.core.docs import (AppMetadata, Docs)
-from src.core.routing import main_router
+from core.config import settings
+from core.docs import (AppMetadata, Docs)
+from core.routing import main_router
 
 
 class GameBuddyApp:
