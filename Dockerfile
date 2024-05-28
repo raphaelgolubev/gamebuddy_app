@@ -6,17 +6,18 @@
 # поэтому команда с копированием файлов приложения (COPY . .) помещена вниз в этом файле
 
 # Всегда размещай слои, которые могут измениться, как можно ниже в файле Dockerfile
-# Объединяй команды RUN apt-get update и RUN apt-get install (это минимизирует количество слоёв)
+# Объединяй команды RUN (это минимизирует количество слоёв)
 # Если хочешь отключить кэширование для конкретной сборки Docker, добавь флаг --no-cache=True
 # Используй легковесные базовые образы (-slim, -alpine)
 # apt-get clean && rm -rf /var/lib/apt/lists/* - удаляет все списки пакетов и временные файлы
 
 # --------------------------- temp stage
-FROM python:3.12.2-slim as builder
+FROM python:3.12.3-slim as builder
 
-# Запрещает Python записывать файлы pyc (__pycache__) на диск 
-# Запрещает Python буферизировать stdout и stderr
+# отсутствие этой переменной может привести к незначительному увеличению 
+# производительности за счет использования скомпилированных файлов .pyc, но увеличит размер образа.
 ENV PYTHONDONTWRITEBYTECODE 1
+# отсутствие этой переменной может привести к задержкам в выводе логов, что усложнит отладку.
 ENV PYTHONUNBUFFERED 1
 
 # В файловой системе контейнера создаем папку с приложением
@@ -27,10 +28,9 @@ RUN pip install --no-cache-dir -U pip \
     && apt-get update \
     && apt-get install -y --no-install-recommends gcc \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && python -m venv /opt/venv
 
-# Создаём виртуальное окружение
-RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Копируем файл с зависимостями в контейнер
