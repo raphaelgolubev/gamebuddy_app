@@ -27,26 +27,26 @@ class Settings:
     class UvicornSettings(BaseSettings):
         """Класс конфигурации uvicorn"""
 
-        HOST: str = Field(alias="uvicorn_host")
-        PORT: int = Field(alias="uvicorn_port")
-        LOG_LEVEL: str = Field(alias="uvicorn_log_level")
+        HOST: str = Field(default="127.0.0.1", alias="uvicorn_host")
+        PORT: int = Field(default=8000, alias="uvicorn_port")
+        LOG_LEVEL: str = Field(default="info", alias="uvicorn_log_level")
 
         model_config = model_config
 
     class DatabaseSettings(BaseSettings):
         """Класс конфигурации базы данных"""
 
-        HOST: str = Field(alias="db_host")
-        PORT: int = Field(alias="db_port")
-        NAME: str = Field(alias="db_name")
-        USER: str = Field(alias="db_user")
-        PASSWORD: str = Field(alias="db_password")
+        HOST: str = Field(default="localhost", alias="db_host")
+        PORT: int = Field(default=5432, alias="db_port")
+        NAME: str = Field(default="mydatabase", alias="db_name")
+        USER: str = Field(default="user", alias="db_user")
+        PASSWORD: str = Field(default="password", alias="db_password")
 
         model_config = model_config
 
         @property
         def asyncpg_url(self) -> str:
-            """Возвращает URL для подключения к базе данных"""
+            """Возвращает URL для подключения к базе данных c asyncpg"""
             return f"postgresql+asyncpg://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.NAME}"
 
 
