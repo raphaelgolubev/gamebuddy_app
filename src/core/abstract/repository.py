@@ -2,14 +2,12 @@ from abc import ABC, abstractmethod
 
 
 class AbstractRepository(ABC):
+    model = None
+
     @abstractmethod
-    async def add_one(self, **data):
+    async def add_one(self, data: dict):
         raise NotImplementedError
 
     @abstractmethod
-    async def find_all(self, **filter_by):
-        raise NotImplementedError
-
-    @abstractmethod
-    async def find_one(self, id):
+    async def find_all(self, filter_by: dict):
         raise NotImplementedError

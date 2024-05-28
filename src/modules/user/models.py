@@ -5,7 +5,7 @@ from uuid import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr
 from sqlalchemy import ForeignKey
 
-from src.core.database import Annotations, Base
+from core.database import Annotations, Base
 
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from .schemas import RegisterIn
+from .schemas import RegisterIn, RegisterOut
+
+from core.dependencies import get_register_service
 
 
 router = APIRouter(prefix="/register", tags=["Регистрация"])
@@ -13,17 +15,23 @@ router = APIRouter(prefix="/register", tags=["Регистрация"])
 # 1004 - время действия кода истекло
 
 
+# TODO: добавить обработку ошибок, покрыть тестами
 @router.post("/create", summary="Создает нового пользователя в базе данных")
-async def create_user(user: RegisterIn):
+async def create_user(user: RegisterIn) -> RegisterOut:
     """
     Метод принимает запрос в формате JSON:
     - **email**: электронная почта пользователя
     - **password**: пароль пользователя
+    Возвращает:
+    - идентификатор пользователя в базе данных
 
     Метод может вернуть следующие ошибки:
     - **1001**: пользователь с таким email уже существует
     """
-    return user
+    service = get_register_service()
+    created = await service.create_user(user.model_dump())
+
+    return created
 
 
 @router.post("/verify", summary="Обновляет статус пользователя")
