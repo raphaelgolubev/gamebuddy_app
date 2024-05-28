@@ -1,27 +1,43 @@
 {
-    "version": "0.2.0",
+    "version": "0.2.0", // Версия конфигурации
     "configurations": [
         {
-            "name": "Gamebuddy configuration",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "src/__main__.py",
-            // "module": "uvicorn",
-            "console": "integratedTerminal",
-            "python": "${command:python.interpreterPath}",
-            "cwd": "${workspaceFolder}",
+            "name": "Gamebuddy configuration", // Название конфигурации
+            "type": "debugpy", // Тип отладчика
+            "request": "launch", // Тип запроса на запуск
+            "program": "src/__main__.py", // Основной файл программы для запуска
+            "console": "integratedTerminal", // Консоль для вывода
+            "python": "${command:python.interpreterPath}", // Путь к интерпретатору Python
+            "cwd": "${workspaceFolder}", // Рабочая директория
             "args": [
-                "--debug"
+                "--debug" // Аргументы командной строки
             ],
-            "justMyCode": true,
+            "justMyCode": true, // Отладка только пользовательского кода
             "presentation": {
-                "hidden": false,
-                "group": "Gamebuddy group",
-                "order": 1
+                "hidden": false, // Показывать ли конфигурацию в списке
+                "group": "Gamebuddy group", // Группа в списке конфигураций
+                "order": 1 // Порядок в группе
             },
             "autoReload": {
-                "enable": true
+                "enable": true // Автоматическая перезагрузка при изменении файлов
+            }
+        },
+        {
+            "name": "Запуск текущего файла", // Название конфигурации
+            "type": "python", // Тип конфигурации
+            "request": "launch", // Тип запроса на запуск
+            "program": "${file}", // Запуск текущего открытого файла
+            "console": "integratedTerminal", // Консоль для вывода
+            "python": "${command:python.interpreterPath}", // Путь к интерпретатору Python
+            "cwd": "${workspaceFolder}", // Рабочая директория
+            "presentation": {
+                "hidden": false, // Показывать ли конфигурацию в списке
+                "group": "Gamebuddy group", // Группа в списке конфигураций
+                "order": 2 // Порядок в группе
             },
+            "autoReload": {
+                "enable": true // Автоматическая перезагрузка при изменении файлов
+            }
         }
     ]
 }
