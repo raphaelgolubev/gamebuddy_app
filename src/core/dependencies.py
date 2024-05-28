@@ -1,23 +1,9 @@
-import logging
+from modules.user.models import User
 
-from fastapi import Request
-
-
-logging.basicConfig(
-    level=logging.INFO, 
-    filename="logs/app.log", 
-    format="%(asctime)s %(levelname)s %(message)s"
-)
+from modules.register.repository import RegisterRepository
+from modules.register.service import RegisterService
 
 
-async def log_request_info(request: Request):
-    request_body = await request.json()
-
-    logging.info(
-        f"{request.method} request to {request.url} metadata\n"
-        f"\tHeaders: {request.headers}\n"
-        f"\tBody: {request_body}\n"
-        f"\tPath Params: {request.path_params}\n"
-        f"\tQuery Params: {request.query_params}\n"
-        f"\tCookies: {request.cookies}\n"
-    )
+def get_register_service():
+    repo = RegisterRepository(model=User)
+    return RegisterService(repo)
