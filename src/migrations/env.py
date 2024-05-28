@@ -6,29 +6,34 @@ from sqlalchemy import pool
 from alembic import context
 
 from src.core.config import settings
+
+from src.modules.user.models import User # noqa
+from src.modules.profile.models import Profile # noqa
+
 from src.core.database import Base
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# Это объект конфигурации Alembic, который предоставляет
+# доступ к значениям в используемом файле .ini.
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Переопределяем URL для подключения к базе данных
+config.set_main_option('sqlalchemy.url', settings.database.asyncpg_url + "?async_fallback=True")
+
+# Интерпретация файла конфигурации для логирования Python.
+# Эта строка настраивает логгеры.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option('sqlalchemy.url', settings.database.asyncpg_url + "?async_fallback=True")
-
-# add your model's MetaData object here
-# for 'autogenerate' support
+# добавьте объект MetaData вашей модели здесь
+# для поддержки 'autogenerate'
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
+# другие значения из конфигурации, определенные потребностями env.py,
+# могут быть получены:
 # my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# ... и т.д.
 
 
 def run_migrations_offline() -> None:

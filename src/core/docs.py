@@ -24,8 +24,9 @@ class Docs:
         self.fastapi_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     def get_swagger_ui_html(self) -> HTMLResponse:
+        openapi_url = self.fastapi_app.openapi_url or "/openapi.json"
         return get_swagger_ui_html(
-            openapi_url=self.fastapi_app.openapi_url,
+            openapi_url=openapi_url,
             title=self.fastapi_app.title + " - Swagger UI",
             oauth2_redirect_url=self.fastapi_app.swagger_ui_oauth2_redirect_url,
             swagger_js_url="/static/swagger-ui-bundle.js",
@@ -39,8 +40,9 @@ class Docs:
         return get_swagger_ui_oauth2_redirect_html()
 
     def get_redoc_html(self) -> HTMLResponse:
+        openapi_url = self.fastapi_app.openapi_url or "/openapi.json"
         return get_redoc_html(
-            openapi_url=self.fastapi_app.openapi_url,
+            openapi_url=openapi_url,
             title=self.fastapi_app.title + " - ReDoc",
             redoc_js_url="/static/redoc.standalone.js",
         )

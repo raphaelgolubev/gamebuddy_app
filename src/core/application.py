@@ -1,12 +1,10 @@
-import time
-
 import uvicorn
-from fastapi import (FastAPI, Request)
+from fastapi import FastAPI
 
-from core.config import settings
-from core.database import create_tables
-from core.docs import (AppMetadata, Docs)
-from core.routing import main_router
+from src.core.config import settings
+from src.core.database import create_tables
+from src.core.docs import (AppMetadata, Docs)
+from src.core.routing import main_router
 
 
 class GameBuddyApp:
@@ -33,7 +31,6 @@ class GameBuddyApp:
 
     def setup(self):
         pass
-        # create_tables()
 
     def run(self, debug_mode=False):
         """
