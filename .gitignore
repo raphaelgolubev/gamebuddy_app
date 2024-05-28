@@ -25,3 +25,5 @@ celerybeat.pid
 .history/
 
 logs/
+
+tests.py
