@@ -1,11 +1,14 @@
-from repository import AbastractRepository
+from repository import AbstractRepository
 
 
-class SQLAlchemyRepository(AbastractRepository):
+class SQLAlchemyRepository(AbstractRepository):
     model = None
 
-    async def add_one(self):
+    async def add_one(self, **data):
         pass
 
-    async def find_all(self):
+    async def find_all(self, **filter_by):
+        pass
+
+    async def find_one(self, **filter_by):
         pass
