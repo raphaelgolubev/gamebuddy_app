@@ -6,7 +6,6 @@
 **/.ssh
 
 Dockerfile
-README.md
 docker-compose.yaml
 README.md
 
@@ -15,3 +14,4 @@ README.md
 **/env
 
 **/docs
+**/__pycache__
