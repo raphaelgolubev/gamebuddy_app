@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends
 
-from core.logger import log_request_info
+from core.dependencies import log_request_info
 from modules.register.routers import router as register_router
 
 

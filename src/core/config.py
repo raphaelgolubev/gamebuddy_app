@@ -1,5 +1,7 @@
 """ Конфигурация приложения """
 
+from logging import INFO, DEBUG, WARNING, ERROR, CRITICAL
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,8 +13,18 @@ model_config = SettingsConfigDict(
 class Settings:
     def __init__(self):
         self.app = Settings.AppSettings()
+        self.logger = Settings.LoggerSettings()
         self.uvicorn = Settings.UvicornSettings()
         self.database = Settings.DatabaseSettings()
+
+    class LoggerSettings(BaseSettings):
+        LOG_LEVEL: int = INFO
+        LOGS_DIR: str = "logs"
+        LOG_BACKUPS_COUNT: int = 5
+        LOG_FILE_LENGTH_LIMIT: int = 512
+        LOG_FORMAT: str = "%(asctime)s %(levelname)s %(message)s"
+
+        model_config = model_config
 
     class AppSettings(BaseSettings):
         """Класс конфигурации приложения"""
