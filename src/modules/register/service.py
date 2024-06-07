@@ -1,4 +1,4 @@
-from modules.register.repository import AbstractRepository
+from core.abstract.repository import AbstractRepository
 from modules.register.schemas import RegisterOut
 
 

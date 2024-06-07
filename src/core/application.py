@@ -1,12 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
 
+from core.utils.singleton import Singleton
 from core.config import settings
-from core.docs import (AppMetadata, Docs)
+from core.docs.docs import AppMetadata
 from core.routing import main_router
 
 
-class GameBuddyApp:
+class GameBuddyApp(Singleton):
     """Объект, управляющий жизненным циклом приложения"""
 
     fastapi_app: FastAPI
@@ -33,7 +34,7 @@ class GameBuddyApp:
 
     def run(self, debug_mode=False):
         """
-        ### Описание
+        ### Описание 
         Запускает сервер, который будет принимать запросы на API.
 
         ### Параметры:
@@ -61,23 +62,14 @@ class GameBuddyApp:
         pass
 
 
-gamebuddy_app = GameBuddyApp()
-
-# =============== SWAGGER UI ===============
-
-docs = Docs(app=gamebuddy_app.fastapi_app)
+# ==== SWAGGER UI ====
 
 
-@docs.fastapi_app.get("/docs/swagger", include_in_schema=False)
+@router.get("/docs/swagger", include_in_schema=False)
 async def custom_swagger_ui():
     return docs.get_swagger_ui_html()
 
 
-@docs.fastapi_app.get(docs.fastapi_app.swagger_ui_oauth2_redirect_url, include_in_schema=False)  # type: ignore
+@router.get(docs.get_swagger_ui_ouath2_redirect_url, include_in_schema=False)
 async def swagger_ui_redirect():
     return docs.get_swagger_ui_oauth2_redirect_html()
-
-
-@docs.fastapi_app.get("/docs/redoc", include_in_schema=False)
-async def redoc_html():
-    return docs.get_redoc_html()

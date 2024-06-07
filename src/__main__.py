@@ -2,7 +2,9 @@
 
 import sys
 
-from core.application import gamebuddy_app
+from core.dependencies import get_gamebuddy_app
+
+gamebuddy_app = get_gamebuddy_app()
 
 if __name__ == "__main__":
     if "--debug" in sys.argv:

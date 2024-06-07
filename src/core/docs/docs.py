@@ -14,8 +14,6 @@ class Docs:
     Класс документации FastAPI.
     """
 
-    fastapi_app: FastAPI
-
     def __init__(self, app: FastAPI):
         self.fastapi_app = app
         self._mount()
@@ -35,6 +33,10 @@ class Docs:
                 "syntaxHighlight.theme": "arta",
             }
         )
+
+    @property
+    def get_swagger_ui_ouath2_redirect_url(self) -> str:
+        return self.fastapi_app.swagger_ui_oauth2_redirect_url or "/redirect_url"
 
     def get_swagger_ui_oauth2_redirect_html(self) -> HTMLResponse:
         return get_swagger_ui_oauth2_redirect_html()
