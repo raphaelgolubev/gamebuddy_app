@@ -8,6 +8,11 @@ from fastapi.openapi.docs import (
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
+from core.logger import AppLogger
+
+
+logger = AppLogger("app", "docs")
+
 
 class Docs:
     """
@@ -21,10 +26,17 @@ class Docs:
         self._mount()
 
     def _mount(self):
+        logger.debug("Регистрируем статические файлы")
         self.fastapi_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     def get_swagger_ui_html(self) -> HTMLResponse:
         openapi_url = self.fastapi_app.openapi_url or "/openapi.json"
+
+        logger.debug("Собираем HTML-файл документации Swagger UI")
+        logger.debug(f"{openapi_url=}")
+        logger.debug("swagger_js_url='/static/swagger-ui-bundle.js'")
+        logger.debug("swagger_css_url='/static/swagger-ui.css'")
+
         return get_swagger_ui_html(
             openapi_url=openapi_url,
             title=self.fastapi_app.title + " - Swagger UI",
@@ -41,6 +53,11 @@ class Docs:
 
     def get_redoc_html(self) -> HTMLResponse:
         openapi_url = self.fastapi_app.openapi_url or "/openapi.json"
+
+        logger.debug("Собираем HTML-файл документации ReDoc")
+        logger.debug(f"{openapi_url=}")
+        logger.debug("redoc_js_url='/static/redoc.standalone.js'")
+
         return get_redoc_html(
             openapi_url=openapi_url,
             title=self.fastapi_app.title + " - ReDoc",

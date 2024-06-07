@@ -7,6 +7,10 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
 from core.config import settings
+from core.logger import AppLogger
+
+
+logger = AppLogger("database", "init")
 
 
 class Base(DeclarativeBase):
@@ -28,6 +32,9 @@ class Annotations:
         ),
     ]
 
+
+logger.debug(f"Создание async_engine: {settings.database.asyncpg_url}")
+logger.debug("Создание async_engine: pool_size=10, max_overflow=10")
 
 async_engine = create_async_engine(
     settings.database.asyncpg_url,
