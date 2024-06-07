@@ -18,11 +18,10 @@ class Settings:
         self.database = Settings.DatabaseSettings()
 
     class LoggerSettings(BaseSettings):
-        LOG_LEVEL: int = INFO
+        LOG_LEVEL: int = DEBUG
         LOGS_DIR: str = "logs"
-        LOG_BACKUPS_COUNT: int = 5
-        LOG_FILE_LENGTH_LIMIT: int = 512
-        LOG_FORMAT: str = "%(asctime)s %(levelname)s %(message)s"
+        LOG_BACKUPS_COUNT: int = 15
+        LOG_FILE_LENGTH_LIMIT: int = 1024 * 1024 * 1
 
         model_config = model_config
 
