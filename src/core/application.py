@@ -5,10 +5,10 @@ from core.config import settings
 from core.docs import (AppMetadata, Docs)
 from core.routing import main_router
 
-from core.logger import AppLogger
+from core.utils.logger import AppLogger
 
 
-logger = AppLogger("app", "lifecycle.log")
+app_logger = AppLogger("app", "lifecycle.log")
 
 
 class GameBuddyApp:
@@ -20,7 +20,7 @@ class GameBuddyApp:
         self._build_fastapi()
 
     def _build_fastapi(self):
-        logger.debug("Создаем FastAPI-объект")
+        app_logger.debug("Создаем FastAPI-объект")
         self.fastapi_app = FastAPI(
             docs_url=None,  # отключаем дефолтные доки
             redoc_url=None,
@@ -50,7 +50,7 @@ class GameBuddyApp:
             else self.fastapi_app
         )
 
-        logger.debug(f"Запускаем сервер на {settings.uvicorn.HOST}:{settings.uvicorn.PORT} debug={debug_mode}")
+        app_logger.debug(f"Запускаем сервер на {settings.uvicorn.HOST}:{settings.uvicorn.PORT} {debug_mode=}")
 
         uvicorn.run(
             instance,
@@ -67,6 +67,7 @@ class GameBuddyApp:
 
 gamebuddy_app = GameBuddyApp()
 
+
 # =============== SWAGGER UI ===============
 
 docs = Docs(app=gamebuddy_app.fastapi_app)
@@ -77,7 +78,7 @@ async def custom_swagger_ui():
     return docs.get_swagger_ui_html()
 
 
-@docs.fastapi_app.get(docs.fastapi_app.swagger_ui_oauth2_redirect_url, include_in_schema=False)  # type: ignore
+@docs.fastapi_app.get(docs.get_swagger_ui_oauth2_redirect_url, include_in_schema=False)  # type: ignore
 async def swagger_ui_redirect():
     return docs.get_swagger_ui_oauth2_redirect_html()
 

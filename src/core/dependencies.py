@@ -5,7 +5,7 @@ from modules.user.models import User
 from modules.register.repository import RegisterRepository
 from modules.register.service import RegisterService
 
-from core.logger import AppLogger
+from core.utils.logger import AppLogger
 
 
 async def log_request_info(request: Request):

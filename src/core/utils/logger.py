@@ -1,16 +1,18 @@
+from hmac import new
 import os
 import logging
+import functools
 
 import inspect
 import traceback
 
 from pathlib import Path
-import idna
-
-from isort import file
 
 from core.config import settings
 from core.utils.logger_handlers import CustomRotatingFileHandler
+from core.utils.logger_formatters import CustomFormatter
+from core.utils.ansi_colors import ANSIColor
+from core.utils.formatting import StringTool
 
 
 class AppLogger:
@@ -54,8 +56,8 @@ class AppLogger:
     - file_suffix: суффикс для имени файла
     - use_date_as_suffix: использовать дату в имени файла
     - date_suffix_format: формат даты в имени файла
-    - use_debug_format: использовать дебаг информацию в логе
     - level: уровень логирования
+    - max_length: максимальная длина строки
     """
 
     def __init__(
@@ -66,8 +68,9 @@ class AppLogger:
         file_suffix: str | None = None,
         use_date_as_suffix: bool = True,
         date_suffix_format: str = "_%Y-%m-%d",
-        use_debug_format: bool = True,
+        show_traceback: bool = True,  # показывает стек вызовов
         level: int = settings.logger.LOG_LEVEL,
+        max_length: int = 180  # максимальная длина строки лога
     ):
 
         self.subsystem = subsystem
@@ -76,10 +79,9 @@ class AppLogger:
         self.file_suffix = file_suffix
         self.use_date_as_suffix = use_date_as_suffix
         self.date_suffix_format = date_suffix_format
-        self.use_debug_format = use_debug_format
+        self.show_traceback = show_traceback
         self.level = level
-
-        self.formatter = self._get_formatter(with_debug_info=self.use_debug_format)
+        self.max_length = max_length
 
         # создает директорию, если не существует
         Path(os.path.join(settings.logger.LOGS_DIR, self.subsystem)).mkdir(parents=True, exist_ok=True)
@@ -91,13 +93,15 @@ class AppLogger:
         self.logger.addHandler(self._get_rotating_handler())
         self.logger.addHandler(self._get_console_handler())
 
-    def _get_formatter(self, with_debug_info: bool = False):
-        if with_debug_info:
-            format = "%(asctime)s [%(filename)s:%(lineno)s] %(levelname)s %(message)s"
-        else:
-            format = "%(asctime)s %(levelname)s %(message)s"
+    def _get_formatter(self, colorize: bool = True):
+        id = self._get_logger_id()
 
-        return logging.Formatter(format)
+        if colorize:
+            format = f"%(asctime)s %(levelname)s ({ANSIColor.bright_magenta}{id}{ANSIColor.reset}) %(message)s"
+            return CustomFormatter(format, max_length=self.max_length, colorize=True)
+        else:
+            format = f"%(asctime)s %(levelname)s ({id}) %(message)s"
+            return CustomFormatter(format, max_length=self.max_length, colorize=False)
 
     def _get_filename(self, value: str):
         if '.log' in value:
@@ -123,45 +127,84 @@ class AppLogger:
             encoding="utf-8", 
             mode="a"
         )
-        rotating_handler.setFormatter(self.formatter)
+        rotating_handler.setFormatter(self._get_formatter(colorize=False))
 
         return rotating_handler
 
     def _get_console_handler(self):
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(self.formatter)
+        console_handler.setFormatter(self._get_formatter(colorize=True))
 
         return console_handler
 
-    def _get_traceback(self):
-        frame = inspect.currentframe()
-        stack_trace = traceback.format_stack(frame)[-5:-2]
-        stack_trace.insert(0, '\n')
+    def _get_traceback(self, levelno: int):
+        def format_line(line: str):
+            f_result = []
+            result = []
+            splitted = line.split(',')
+            for item in splitted:
+                if 'File' in item:
+                    new_item = item.replace('File', '').replace('"', '').strip()
+                    f_result.append(new_item)
+                elif 'line' in item:
+                    item_splitted = item.strip().split(' ')
+                    f_result.append(item_splitted[1])
+                else:
+                    result.append(item.strip())
 
-        return ' -> '.join(stack_trace)
+            first = ':'.join(f_result)
+            result.insert(0, first)
+
+            return ', '.join(result)
+
+        frame = inspect.currentframe()
+        stack_trace = traceback.format_stack(frame)  # [-15:-2]
+        clear_trace = list(filter(lambda x: '<frozen' not in x, stack_trace))
+        clear_trace = clear_trace[:-3]
+
+        for i, line in enumerate(clear_trace):
+            new_line = line.strip().replace('\n', '')
+            new_line = format_line(new_line)
+
+            clear_trace[i] = new_line + '\n'
+
+        clear_trace.insert(0, '\n')
+
+        return ' -> '.join(clear_trace)
+
+    def _display_trace(self, levelno: int):
+        if self.show_traceback:
+            trace = f"TRACEBACK:\n{self._get_traceback(levelno)}\n"
+            self.logger.debug(trace)
 
     def info(self, msg, *args, **kwargs):
-        self.logger.debug(msg, *args, **kwargs)
+        self.logger.info(msg, *args, **kwargs)
+        self._display_trace(logging.INFO)
 
     def debug(self, msg, *args, **kwargs):
-        id = self._get_logger_id()
-        trace = f"({id}) {msg}\n{self._get_traceback()}\n"
-        self.logger.debug(trace, *args, **kwargs)
+        self.logger.debug(msg, *args, **kwargs)
+        self._display_trace(logging.DEBUG)
 
     def error(self, msg, *args, **kwargs):
         self.logger.error(msg, *args, **kwargs)
+        self._display_trace(logging.ERROR)
 
     def warn(self, msg, *args, **kwargs):
         self.logger.warn(msg, *args, **kwargs)
+        self._display_trace(logging.WARN)
 
     def warning(self, msg, *args, **kwargs):
         self.logger.warning(msg, *args, **kwargs)
+        self._display_trace(logging.WARNING)
 
     def fatal(self, msg, *args, **kwargs):
         self.logger.fatal(msg, *args, **kwargs)
+        self._display_trace(logging.FATAL)
 
     def critical(self, msg, *args, **kwargs):
         self.logger.critical(msg, *args, **kwargs)
+        self._display_trace(logging.CRITICAL)
 
     def exception(self, msg, *args, **kwargs):
         self.logger.exception(msg, *args, **kwargs)
+        self._display_trace(logging.CRITICAL)
