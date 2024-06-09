@@ -1,4 +1,3 @@
-from core.abstract.repository import AbstractRepository
 from core.abstract.sqla_repo import SQLAlchemyRepository
 
 from modules.user.models import User

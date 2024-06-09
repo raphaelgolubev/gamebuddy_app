@@ -8,7 +8,7 @@ from fastapi.openapi.docs import (
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from core.logger import AppLogger
+from core.utils.logger import AppLogger
 
 
 logger = AppLogger("app", "docs")
@@ -19,15 +19,19 @@ class Docs:
     Класс документации FastAPI.
     """
 
-    fastapi_app: FastAPI
-
     def __init__(self, app: FastAPI):
         self.fastapi_app = app
         self._mount()
 
     def _mount(self):
         logger.debug("Регистрируем статические файлы")
-        self.fastapi_app.mount("/static", StaticFiles(directory="static"), name="static")
+        logger.info("TEST INFO")
+        logger.warn("TEST WARN")
+        logger.warning("TEST WARNING")
+        logger.fatal("TEST FATAL")
+        logger.error("TEST ERROR")
+        logger.exception("TEST EXCEPTION")
+        self.fastapi_app.mount("/static", StaticFiles(directory="static/swagger"), name="static")
 
     def get_swagger_ui_html(self) -> HTMLResponse:
         openapi_url = self.fastapi_app.openapi_url or "/openapi.json"
@@ -47,6 +51,10 @@ class Docs:
                 "syntaxHighlight.theme": "arta",
             }
         )
+
+    @property
+    def get_swagger_ui_oauth2_redirect_url(self) -> str:
+        return self.fastapi_app.swagger_ui_oauth2_redirect_url or '/redirect-url-none'
 
     def get_swagger_ui_oauth2_redirect_html(self) -> HTMLResponse:
         return get_swagger_ui_oauth2_redirect_html()

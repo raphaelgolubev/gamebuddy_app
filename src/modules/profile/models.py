@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Mapped, mapped_column, relationship, declared_attr
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
 
 from core.database import Annotations, Base

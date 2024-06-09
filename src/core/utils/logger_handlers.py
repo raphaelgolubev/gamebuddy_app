@@ -1,6 +1,6 @@
 import os, time
 import logging, logging.handlers
-from pathlib import Path, PurePath
+from pathlib import PurePath
 
 
 # здесь я просто переопределяю метод для модификации имени файла
