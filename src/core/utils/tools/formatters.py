@@ -1,6 +1,3 @@
-from tokenize import String
-
-
 class StringTool:
     @staticmethod
     def is_empty(s):

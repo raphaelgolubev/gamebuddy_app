@@ -18,17 +18,28 @@ class Settings:
         self.database = Settings.DatabaseSettings()
 
     class LoggerSettings(BaseSettings):
-        LOG_LEVEL: int = DEBUG
-        LOGS_DIR: str = "logs"
-        LOG_BACKUPS_COUNT: int = 15
-        LOG_FILE_LENGTH_LIMIT: int = 1024 * 1024 * 1
+        LEVEL: int = DEBUG
+        DIR: str = "logs"
+        BACKUPS_COUNT: int = 15
+        FILE_LENGTH_LIMIT: int = 1024 * 1024 * 1
+
+        SENSITIVE_REGEX_PATTERNS: list[str] = [
+            r"\d{3}-\d{2}-\d{4}"
+        ]
+        SENSITIVE_KEYS: tuple = (
+            "headers",
+            "credentials",
+            "Authorization",
+            "token",
+            "password",
+        )
 
         model_config = model_config
 
     class AppSettings(BaseSettings):
         """Класс конфигурации приложения"""
 
-        APP_VERSION: str = "0.0.1"
+        VERSION: str = "0.0.1"
         API_PATH: str = "/api"
         API_VERSION: str = "v1"
         API_URL: str = f"{API_PATH}/{API_VERSION}"

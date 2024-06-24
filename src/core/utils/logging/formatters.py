@@ -1,8 +1,7 @@
 import logging
-from tokenize import String
 
-from core.utils.ansi_colors import ANSIColor
-from core.utils.formatting import StringTool
+from core.utils.tools.ansi_colors import ANSIColor
+from core.utils.tools.formatters import StringTool
 
 
 class CustomFormatter(logging.Formatter):
@@ -89,7 +88,6 @@ class CustomFormatter(logging.Formatter):
         message = record.getMessage()
         message = self._hightlight_syntax(message) if self.colorize else message
         message = self._wrap_lines(message)
-        # message = StringTool.wrap(message, self.max_length)
 
         new_record = logging.LogRecord(
             name=record.name,

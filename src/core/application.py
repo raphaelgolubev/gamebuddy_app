@@ -5,10 +5,7 @@ from core.config import settings
 from core.docs import (AppMetadata, Docs)
 from core.routing import main_router
 
-from core.utils.logger import AppLogger
-
-
-app_logger = AppLogger("app", "lifecycle.log")
+from core.utils.logging.logger import AppLogger
 
 
 class GameBuddyApp:
@@ -20,7 +17,6 @@ class GameBuddyApp:
         self._build_fastapi()
 
     def _build_fastapi(self):
-        app_logger.debug("Создаем FastAPI-объект")
         self.fastapi_app = FastAPI(
             docs_url=None,  # отключаем дефолтные доки
             redoc_url=None,
@@ -28,7 +24,7 @@ class GameBuddyApp:
             summary=AppMetadata.summary,
             description=AppMetadata.description,
             openapi_tags=AppMetadata.tags,
-            version=settings.app.APP_VERSION,
+            version=settings.app.VERSION,
         )
 
         self.fastapi_app.include_router(main_router)
@@ -49,8 +45,6 @@ class GameBuddyApp:
             if debug_mode
             else self.fastapi_app
         )
-
-        app_logger.debug(f"Запускаем сервер на {settings.uvicorn.HOST}:{settings.uvicorn.PORT} {debug_mode=}")
 
         uvicorn.run(
             instance,

@@ -1,7 +1,5 @@
-from hmac import new
 import os
 import logging
-import functools
 
 import inspect
 import traceback
@@ -9,10 +7,10 @@ import traceback
 from pathlib import Path
 
 from core.config import settings
-from core.utils.logger_handlers import CustomRotatingFileHandler
-from core.utils.logger_formatters import CustomFormatter
-from core.utils.ansi_colors import ANSIColor
-from core.utils.formatting import StringTool
+from core.utils.logging.handlers import CustomRotatingFileHandler
+from core.utils.logging.formatters import CustomFormatter
+from core.utils.logging.filters import SensitiveDataFilter
+from core.utils.tools.ansi_colors import ANSIColor
 
 
 class AppLogger:
@@ -56,6 +54,7 @@ class AppLogger:
     - file_suffix: суффикс для имени файла
     - use_date_as_suffix: использовать дату в имени файла
     - date_suffix_format: формат даты в имени файла
+    - show_traceback: показывать стек вызовов
     - level: уровень логирования
     - max_length: максимальная длина строки
     """
@@ -68,8 +67,8 @@ class AppLogger:
         file_suffix: str | None = None,
         use_date_as_suffix: bool = True,
         date_suffix_format: str = "_%Y-%m-%d",
-        show_traceback: bool = True,  # показывает стек вызовов
-        level: int = settings.logger.LOG_LEVEL,
+        show_traceback: bool = False,  # показывает стек вызовов
+        level: int = settings.logger.LEVEL,
         max_length: int = 180  # максимальная длина строки лога
     ):
 
@@ -84,11 +83,15 @@ class AppLogger:
         self.max_length = max_length
 
         # создает директорию, если не существует
-        Path(os.path.join(settings.logger.LOGS_DIR, self.subsystem)).mkdir(parents=True, exist_ok=True)
-        self.log_file_path: str = os.path.join(settings.logger.LOGS_DIR, self.subsystem, self.base_filename)
+        Path(os.path.join(settings.logger.DIR, self.subsystem)).mkdir(parents=True, exist_ok=True)
+        self.log_file_path: str = os.path.join(settings.logger.DIR, self.subsystem, self.base_filename)
 
         self.logger = logging.getLogger(self._get_logger_id())
         self.logger.setLevel(level=self.level)
+        self.logger.addFilter(SensitiveDataFilter(
+            settings.logger.SENSITIVE_REGEX_PATTERNS,
+            settings.logger.SENSITIVE_KEYS
+        ))
 
         self.logger.addHandler(self._get_rotating_handler())
         self.logger.addHandler(self._get_console_handler())
@@ -122,8 +125,8 @@ class AppLogger:
             file_suffix=self.file_suffix,
             use_date_as_suffix=self.use_date_as_suffix,
             date_suffix_format=self.date_suffix_format,
-            maxBytes=settings.logger.LOG_FILE_LENGTH_LIMIT, 
-            backupCount=settings.logger.LOG_BACKUPS_COUNT, 
+            maxBytes=settings.logger.FILE_LENGTH_LIMIT, 
+            backupCount=settings.logger.BACKUPS_COUNT, 
             encoding="utf-8", 
             mode="a"
         )
@@ -137,7 +140,7 @@ class AppLogger:
 
         return console_handler
 
-    def _get_traceback(self, levelno: int):
+    def _get_traceback(self):
         def format_line(line: str):
             f_result = []
             result = []
@@ -172,39 +175,39 @@ class AppLogger:
 
         return ' -> '.join(clear_trace)
 
-    def _display_trace(self, levelno: int):
+    def _display_trace(self):
         if self.show_traceback:
-            trace = f"TRACEBACK:\n{self._get_traceback(levelno)}\n"
+            trace = f"TRACEBACK:\n{self._get_traceback()}\n"
             self.logger.debug(trace)
 
     def info(self, msg, *args, **kwargs):
         self.logger.info(msg, *args, **kwargs)
-        self._display_trace(logging.INFO)
+        self._display_trace()
 
     def debug(self, msg, *args, **kwargs):
         self.logger.debug(msg, *args, **kwargs)
-        self._display_trace(logging.DEBUG)
+        self._display_trace()
 
     def error(self, msg, *args, **kwargs):
         self.logger.error(msg, *args, **kwargs)
-        self._display_trace(logging.ERROR)
+        self._display_trace()
 
     def warn(self, msg, *args, **kwargs):
         self.logger.warn(msg, *args, **kwargs)
-        self._display_trace(logging.WARN)
+        self._display_trace()
 
     def warning(self, msg, *args, **kwargs):
         self.logger.warning(msg, *args, **kwargs)
-        self._display_trace(logging.WARNING)
+        self._display_trace()
 
     def fatal(self, msg, *args, **kwargs):
         self.logger.fatal(msg, *args, **kwargs)
-        self._display_trace(logging.FATAL)
+        self._display_trace()
 
     def critical(self, msg, *args, **kwargs):
         self.logger.critical(msg, *args, **kwargs)
-        self._display_trace(logging.CRITICAL)
+        self._display_trace()
 
     def exception(self, msg, *args, **kwargs):
         self.logger.exception(msg, *args, **kwargs)
-        self._display_trace(logging.CRITICAL)
+        self._display_trace()
