@@ -5,8 +5,16 @@ from core.utils.tools.formatters import StringTool
 
 
 class CustomFormatter(logging.Formatter):
-
+    """Класс для форматирования сообщений логов.
+    """
     def __init__(self, fmt, max_length: int, colorize: bool = True):
+        """Создает экземпляр класса.
+
+        Args:
+            fmt (_type_): формат сообщения логов.
+            max_length (int): маскимальная длина строки в символах.
+            colorize (bool, optional): выполнять выделение слов в строке цветом ANSI. По умолчанию True.
+        """
         super().__init__()
         self.fmt = fmt
         self.max_length = max_length

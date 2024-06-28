@@ -1,4 +1,5 @@
 from datetime import datetime
+from sys import exc_info
 from typing import Annotated
 from uuid import UUID, uuid4
 
@@ -10,7 +11,7 @@ from core.config import settings
 from core.utils.logging.logger import AppLogger
 
 
-logger = AppLogger("database", "init")
+logger = AppLogger(__name__)
 
 
 class Base(DeclarativeBase):
@@ -42,6 +43,8 @@ config = {
 
 test_case = {"username": "John Doe", "password": "1234567890", "Authorization": "Bearer 123123123123"}
 logger.debug("test %s", test_case)
+
+logger.debug("testing", exc_info=True)
 
 async_engine = create_async_engine(url, **config)
 async_session_factory = async_sessionmaker(async_engine)

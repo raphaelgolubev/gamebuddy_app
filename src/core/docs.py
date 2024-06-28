@@ -8,8 +8,6 @@ from fastapi.openapi.docs import (
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from core.utils.logging.logger import AppLogger
-
 
 class Docs:
     """

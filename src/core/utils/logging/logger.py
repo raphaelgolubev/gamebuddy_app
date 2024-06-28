@@ -48,8 +48,8 @@ class AppLogger:
     >Примечание: на самом деле файл никогда не будет весить ровно 512 КБ, он будет иметь размер
     максимально близкий к лимиту, например 498 КБ или 505 КБ.
 
-    - subsystem: имя подсистемы, которая будет использоваться в имени папки для логов
     - base_filename: имя файла, в который будет записан лог
+    - subsystem: имя подсистемы, которая будет использоваться в имени папки для логов
     - file_prefix: префикс для имени файла
     - file_suffix: суффикс для имени файла
     - use_date_as_suffix: использовать дату в имени файла
@@ -61,42 +61,52 @@ class AppLogger:
 
     def __init__(
         self,
-        subsystem: str, 
         base_filename: str, 
-        file_prefix: str | None = None,
-        file_suffix: str | None = None,
-        use_date_as_suffix: bool = True,
-        date_suffix_format: str = "_%Y-%m-%d",
-        show_traceback: bool = False,  # показывает стек вызовов
+        subsystem: str = "", 
+        file_prefix: str | None = settings.logger.FILE_PREFIX,
+        file_suffix: str | None = settings.logger.FILE_SUFFIX,
+        use_date_as_suffix: bool = settings.logger.USE_DATE_AS_SUFFIX,
+        date_suffix_format: str = settings.logger.DATE_SUFFIX_FORMAT,
+        show_traceback: bool = settings.logger.SHOW_TRACEBACK,  # показывает стек вызовов
         level: int = settings.logger.LEVEL,
-        max_length: int = 180  # максимальная длина строки лога
+        max_length: int = settings.logger.MAX_LENGTH  # максимальная длина строки лога
     ):
 
-        self.subsystem = subsystem
-        self.base_filename = self._get_filename(base_filename)
-        self.file_prefix = file_prefix
-        self.file_suffix = file_suffix
-        self.use_date_as_suffix = use_date_as_suffix
-        self.date_suffix_format = date_suffix_format
-        self.show_traceback = show_traceback
-        self.level = level
-        self.max_length = max_length
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.subsystem = subsystem
+            self.base_filename = self._get_filename(base_filename)
+            self.file_prefix = file_prefix
+            self.file_suffix = file_suffix
+            self.use_date_as_suffix = use_date_as_suffix
+            self.date_suffix_format = date_suffix_format
+            self.show_traceback = show_traceback
+            self.level = level
+            self.max_length = max_length
 
-        # создает директорию, если не существует
-        Path(os.path.join(settings.logger.DIR, self.subsystem)).mkdir(parents=True, exist_ok=True)
-        self.log_file_path: str = os.path.join(settings.logger.DIR, self.subsystem, self.base_filename)
+            # создает директорию, если не существует
+            Path(os.path.join(settings.logger.DIR, self.subsystem)).mkdir(parents=True, exist_ok=True)
+            self.log_file_path: str = os.path.join(settings.logger.DIR, self.subsystem, self.base_filename)
 
-        self.logger = logging.getLogger(self._get_logger_id())
-        self.logger.setLevel(level=self.level)
-        self.logger.addFilter(SensitiveDataFilter(
-            settings.logger.SENSITIVE_REGEX_PATTERNS,
-            settings.logger.SENSITIVE_KEYS
-        ))
+            self.logger = logging.getLogger(self._get_logger_id())
+            self.logger.propagate = False  # не дублировать в корневой логгер
+            self.logger.setLevel(level=self.level)
+            self.logger.addFilter(SensitiveDataFilter(
+                settings.logger.SENSITIVE_REGEX_PATTERNS,
+                settings.logger.SENSITIVE_KEYS
+            ))
 
-        self.logger.addHandler(self._get_rotating_handler())
-        self.logger.addHandler(self._get_console_handler())
+            self.logger.addHandler(self._get_rotating_handler())
+            self.logger.addHandler(self._get_console_handler())
 
     def _get_formatter(self, colorize: bool = True):
+        """Создает форматтер для логов.
+
+        Args:
+            colorize (bool, optional): выполнять ли выделение строк цветом ANSI. По умолчанию True.
+
+        Returns:
+            `CustomFormatter`: кастомный форматтер логов.
+        """
         id = self._get_logger_id()
 
         if colorize:
@@ -107,18 +117,37 @@ class AppLogger:
             return CustomFormatter(format, max_length=self.max_length, colorize=False)
 
     def _get_filename(self, value: str):
+        """Возвращает имя файла с добавлением расширения `.log`.
+
+        Args:
+            value (str): имя файла, переданное пользователем, которое может не содержать `.log`
+
+        Returns:
+            `str`: имя файла, переданное пользователем в параметре `value` с добавлением расширения `.log` в конце
+        """
         if '.log' in value:
             return value
         else:
             return f"{value}.log"
 
     def _get_logger_id(self):
+        """Создает уникальный идентификатор для логера.
+
+        Returns:
+            `str`: идентификатор логгера в формате `<подсистема>::<имя файла>`
+        """
         filename = self._get_filename(self.base_filename)
         target = Path(filename).stem
 
         return f"{self.subsystem}::{target}"
 
     def _get_rotating_handler(self):
+        """Создает обработчик вывода записей лога в файл.
+
+        Returns:
+            `CustomRotatingFileHandler`: кастомный обработчик вывода записей лога в файл
+        """
+
         rotating_handler = CustomRotatingFileHandler(
             filename=self.log_file_path,
             file_prefix=self.file_prefix,
@@ -135,12 +164,22 @@ class AppLogger:
         return rotating_handler
 
     def _get_console_handler(self):
+        """Создает обработчик вывода записей лога в консоль.
+
+        Returns:
+            `StreamHandler`: обработчик вывода записей лога в консоль.
+        """
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(self._get_formatter(colorize=True))
 
         return console_handler
 
     def _get_traceback(self):
+        """Получает стэк вызовов и форматирует его.
+
+        Returns:
+            `str`: форматированный стэк вызовов.
+        """
         def format_line(line: str):
             f_result = []
             result = []
@@ -176,38 +215,48 @@ class AppLogger:
         return ' -> '.join(clear_trace)
 
     def _display_trace(self):
+        """Добавляет в лог стэк вызовов, если `self.show_traceback` = `True`
+        """
         if self.show_traceback:
             trace = f"TRACEBACK:\n{self._get_traceback()}\n"
             self.logger.debug(trace)
 
     def info(self, msg, *args, **kwargs):
-        self.logger.info(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.info(msg, *args, **kwargs)
+            self._display_trace()
 
     def debug(self, msg, *args, **kwargs):
-        self.logger.debug(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.debug(msg, *args, **kwargs)
+            self._display_trace()
 
     def error(self, msg, *args, **kwargs):
-        self.logger.error(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.error(msg, *args, **kwargs)
+            self._display_trace()
 
     def warn(self, msg, *args, **kwargs):
-        self.logger.warn(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.warn(msg, *args, **kwargs)
+            self._display_trace()
 
     def warning(self, msg, *args, **kwargs):
-        self.logger.warning(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.warning(msg, *args, **kwargs)
+            self._display_trace()
 
     def fatal(self, msg, *args, **kwargs):
-        self.logger.fatal(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.fatal(msg, *args, **kwargs)
+            self._display_trace()
 
     def critical(self, msg, *args, **kwargs):
-        self.logger.critical(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.critical(msg, *args, **kwargs)
+            self._display_trace()
 
     def exception(self, msg, *args, **kwargs):
-        self.logger.exception(msg, *args, **kwargs)
-        self._display_trace()
+        if settings.logger.IS_LOGGER_ENABLED:
+            self.logger.exception(msg, *args, **kwargs)
+            self._display_trace()

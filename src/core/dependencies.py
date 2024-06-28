@@ -9,7 +9,7 @@ from core.utils.logging.logger import AppLogger
 
 
 async def log_request_info(request: Request):
-    logger = AppLogger("requests", "requests.log")
+    logger = AppLogger("request_metadata")
     request_body = await request.json()
 
     logger.debug(

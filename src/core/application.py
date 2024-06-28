@@ -5,8 +5,6 @@ from core.config import settings
 from core.docs import (AppMetadata, Docs)
 from core.routing import main_router
 
-from core.utils.logging.logger import AppLogger
-
 
 class GameBuddyApp:
     """Объект, управляющий жизненным циклом приложения"""
@@ -60,7 +58,6 @@ class GameBuddyApp:
 
 
 gamebuddy_app = GameBuddyApp()
-
 
 # =============== SWAGGER UI ===============
 

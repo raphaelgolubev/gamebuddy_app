@@ -3,12 +3,22 @@ import re
 
 
 class SensitiveDataFilter(logging.Filter):
+    """Класс для фильтрации логов от чувствительных данных.
+    """
     def __init__(
         self, 
         patterns: list[str], 
         sensitive_keys: tuple,
         name: str = ""
     ) -> None:
+        """Создает экземпляр класса.
+
+        Args:
+            patterns (list[str]): regex-паттерны для маскирования секретных данных.
+            sensitive_keys (tuple): ключи словарей, значения которых нужно маскировать.
+            name (str, optional): имя логгера, события которого, как и его дочерние элементы, 
+            будут пропущены через фильтр. Если имя не указано, разрешается каждое событие. По умолчнанию "".
+        """
         super().__init__(name)
 
         self._patterns = patterns

@@ -1,6 +1,6 @@
 """ Конфигурация приложения """
 
-from logging import INFO, DEBUG, WARNING, ERROR, CRITICAL
+from logging import (INFO, DEBUG, WARNING, ERROR, CRITICAL)
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -18,10 +18,19 @@ class Settings:
         self.database = Settings.DatabaseSettings()
 
     class LoggerSettings(BaseSettings):
+        IS_LOGGER_ENABLED: bool = True
+
         LEVEL: int = DEBUG
         DIR: str = "logs"
         BACKUPS_COUNT: int = 15
         FILE_LENGTH_LIMIT: int = 1024 * 1024 * 1
+
+        FILE_PREFIX: str | None = None
+        FILE_SUFFIX: str | None = None
+        USE_DATE_AS_SUFFIX: bool = False
+        DATE_SUFFIX_FORMAT: str = "_%Y-%m-%d"
+        SHOW_TRACEBACK: bool = False
+        MAX_LENGTH: int = 180
 
         SENSITIVE_REGEX_PATTERNS: list[str] = [
             r"\d{3}-\d{2}-\d{4}"
