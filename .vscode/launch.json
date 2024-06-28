@@ -2,7 +2,7 @@
     "version": "0.2.0", // Версия конфигурации
     "configurations": [
         {
-            "name": "Gamebuddy configuration", // Название конфигурации
+            "name": "Gamebuddy", // Название конфигурации
             "type": "debugpy", // Тип отладчика
             "request": "launch", // Тип запроса на запуск
             "program": "src/__main__.py", // Основной файл программы для запуска
@@ -15,7 +15,7 @@
             "justMyCode": true, // Отладка только пользовательского кода
             "presentation": {
                 "hidden": false, // Показывать ли конфигурацию в списке
-                "group": "Gamebuddy group", // Группа в списке конфигураций
+                "group": "Python", // Группа в списке конфигураций
                 "order": 1 // Порядок в группе
             },
             "autoReload": {
@@ -24,7 +24,7 @@
         },
         {
             "name": "Запуск текущего файла", // Название конфигурации
-            "type": "python", // Тип конфигурации
+            "type": "debugpy", // Тип конфигурации
             "request": "launch", // Тип запроса на запуск
             "program": "${file}", // Запуск текущего открытого файла
             "console": "integratedTerminal", // Консоль для вывода
@@ -32,6 +32,8 @@
             "cwd": "${workspaceFolder}", // Рабочая директория
             "presentation": {
                 "hidden": false, // Показывать ли конфигурацию в списке
+                "group": "Python",
+                "order": 2
             },
             "autoReload": {
                 "enable": true // Автоматическая перезагрузка при изменении файлов

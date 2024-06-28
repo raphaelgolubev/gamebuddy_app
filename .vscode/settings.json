@@ -21,7 +21,8 @@
     "search.useIgnoreFiles": false, // Не использовать игнорируемые файлы при поиске
     "python.analysis.diagnosticSeverityOverrides": {
         "reportUndefinedVariable": "warning",
-        "reportGeneralTypeIssues": "warning"
+        "reportGeneralTypeIssues": "warning",
+        "reportAttributeAccessIssue": "warning",
     }
 }
 
