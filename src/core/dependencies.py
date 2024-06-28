@@ -1,19 +1,17 @@
 from fastapi import Request
+from loguru import logger
 
 from modules.user.models import User
 
 from modules.register.repository import RegisterRepository
 from modules.register.service import RegisterService
 
-from core.utils.logging.logger import AppLogger
-
 
 async def log_request_info(request: Request):
-    logger = AppLogger("request_metadata")
     request_body = await request.json()
 
     logger.debug(
-        f"{request.method} request to {request.url} metadata\n"
+        f"{request.method} request to {request.url} \n"
         f"\tHeaders: {request.headers}\n"
         f"\tBody: {request_body}\n"
         f"\tPath Params: {request.path_params}\n"

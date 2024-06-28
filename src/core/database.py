@@ -8,10 +8,6 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
 from core.config import settings
-from core.utils.logging.logger import AppLogger
-
-
-logger = AppLogger(__name__)
 
 
 class Base(DeclarativeBase):
@@ -40,11 +36,6 @@ config = {
     "pool_size": 10,
     "max_overflow": 10,
 }
-
-test_case = {"username": "John Doe", "password": "1234567890", "Authorization": "Bearer 123123123123"}
-logger.debug("test %s", test_case)
-
-logger.debug("testing", exc_info=True)
 
 async_engine = create_async_engine(url, **config)
 async_session_factory = async_sessionmaker(async_engine)
