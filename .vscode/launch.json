@@ -12,7 +12,7 @@
             "args": [
                 "--debug" // Аргументы командной строки
             ],
-            "justMyCode": true, // Отладка только пользовательского кода
+            "justMyCode": false, // Отладка только пользовательского кода
             "presentation": {
                 "hidden": false, // Показывать ли конфигурацию в списке
                 "group": "Python", // Группа в списке конфигураций
@@ -30,6 +30,27 @@
             "console": "integratedTerminal", // Консоль для вывода
             "python": "${command:python.interpreterPath}", // Путь к интерпретатору Python
             "cwd": "${workspaceFolder}", // Рабочая директория
+            "presentation": {
+                "hidden": false, // Показывать ли конфигурацию в списке
+                "group": "Python",
+                "order": 2
+            },
+            "autoReload": {
+                "enable": true // Автоматическая перезагрузка при изменении файлов
+            }
+        },
+        {
+            "name": "Alembic", // Название конфигурации
+            "type": "debugpy", // Тип конфигурации
+            "request": "launch", // Тип запроса на запуск
+            "program": "${file}", // Запуск текущего открытого файла
+            "console": "integratedTerminal", // Консоль для вывода
+            "python": "${command:python.interpreterPath}", // Путь к интерпретатору Python
+            "cwd": "${workspaceFolder}", // Рабочая директория
+            "args": [
+                "revision",
+                "--autogenerate"
+            ],
             "presentation": {
                 "hidden": false, // Показывать ли конфигурацию в списке
                 "group": "Python",
