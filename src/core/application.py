@@ -5,6 +5,12 @@ from core.config import settings
 from core.docs import (AppMetadata, Docs)
 from core.routing import main_router
 
+from pydantic_core import ValidationError
+from core.exceptions import (
+    routers,
+    register_errors
+)
+
 
 class GameBuddyApp:
     """Объект, управляющий жизненным циклом приложения"""
@@ -24,7 +30,28 @@ class GameBuddyApp:
             openapi_tags=AppMetadata.tags,
             version=settings.app.VERSION,
         )
+
+        self._attach_exception_handlers()
         self.fastapi_app.include_router(main_router)
+
+    def _attach_exception_handlers(self):
+        self.fastapi_app.add_exception_handler(
+            ValidationError, 
+            routers.validation_exception_handler
+        )
+        self.fastapi_app.add_exception_handler(
+            routers.InvalidRequestError, 
+            handler=routers.invalid_request_exception_handler
+        )
+        self.fastapi_app.add_exception_handler(
+            Exception, 
+            routers.generic_exception_handler
+        )
+
+        self.fastapi_app.add_exception_handler(
+            register_errors.UserAlreadyExistsError, 
+            handler=register_errors.user_already_exists
+        )
 
     def run(self, debug_mode=False):
         """

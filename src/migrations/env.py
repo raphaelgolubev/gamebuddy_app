@@ -7,10 +7,6 @@ from alembic import context
 
 from src.core.config import settings
 
-from entities.models.user import User # noqa
-# from src.modules.profile.models import Profile # noqa
-
-from src.core.database.classes import Base
 
 # Это объект конфигурации Alembic, который предоставляет
 # доступ к значениям в используемом файле .ini.
@@ -28,7 +24,13 @@ if config.config_file_name is not None:
 # для поддержки 'autogenerate'
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata
+
+from entities.models.user import User # noqa
+from entities.models.profile import Profile # noqa
+
+from src.core.database.classes import Base
+
+target_metadata = User.metadata
 
 # другие значения из конфигурации, определенные потребностями env.py,
 # могут быть получены:

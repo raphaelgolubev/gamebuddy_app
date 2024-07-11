@@ -11,4 +11,4 @@ class Profile(Base):
     created_at: Mapped[Annotations.created_at]
     updated_at: Mapped[Annotations.updated_at]
 
-    user = relationship("User", back_populates="profile")
+    # user = relationship("User", uselist=False)

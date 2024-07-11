@@ -58,22 +58,20 @@ class SQLAlchemyRepository(AbstractRepository):
     def __init__(self, model: Type[Base]) -> None:
         self.model = model
 
-    @with_session_factory
-    def create(self, conn: Connection, data):
-        stmt = (
-            insert(self.model).
-            values(**data)
-        )
-        result = conn.execute(stmt)
-        conn.commit()
+    def create(self, data):
+        with engine.connect() as conn:
+            stmt = insert(self.model).values(**data)
 
-        return result
+            result = conn.execute(stmt)
+            conn.commit()
 
-    def get(self, conn: Connection, filter_by):
+            return result
+
+    def get(self, filter_by):
         ...
 
-    def update(self, conn: Connection, data):
+    def update(self, data):
         ...
 
-    def delete(self, conn: Connection, data):
+    def delete(self, data):
         ...

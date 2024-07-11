@@ -4,10 +4,10 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import text
 from sqlalchemy.orm import DeclarativeBase, mapped_column
+from sqlalchemy.ext.declarative import declarative_base
 
 
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base()
 
 
 class Annotations:
