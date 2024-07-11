@@ -1,7 +1,7 @@
-from core.abstract.sqla_repo import SQLAlchemyRepository
+from core.database.sqla_repo import SQLAlchemyRepository
 
-from modules.user.models import User
-from modules.profile.models import Profile # noqa
+from entities.models.user import User
+# from modules.profile.models import Profile # noqa
 
 
 # Я импортирую модель Profile во избежание ошибки SQLAlchemy, которая

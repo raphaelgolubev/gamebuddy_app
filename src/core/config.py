@@ -72,13 +72,14 @@ class Settings:
         NAME: str = Field(default="mydatabase", alias="db_name")
         USER: str = Field(default="user", alias="db_user")
         PASSWORD: str = Field(default="password", alias="db_password")
+        DRIVER: str = "psycopg2"
 
         model_config = model_config
 
         @property
-        def asyncpg_url(self) -> str:
-            """Возвращает URL для подключения к базе данных c asyncpg"""
-            return f"postgresql+asyncpg://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.NAME}"
+        def url(self) -> str:
+            """Возвращает URL для подключения к базе данных"""
+            return f"postgresql+{self.DRIVER}://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.NAME}"
 
 
 settings = Settings()

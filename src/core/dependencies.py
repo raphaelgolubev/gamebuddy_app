@@ -1,11 +1,6 @@
 from fastapi import Request
 from loguru import logger
 
-from modules.user.models import User
-
-from modules.register.repository import RegisterRepository
-from modules.register.service import RegisterService
-
 
 async def log_request_info(request: Request):
     request_body = await request.json()
@@ -18,8 +13,3 @@ async def log_request_info(request: Request):
         f"\tQuery Params: {request.query_params}\n"
         f"\tCookies: {request.cookies}\n"
     )
-
-
-def get_register_service():
-    repo = RegisterRepository(model=User)
-    return RegisterService(repo)

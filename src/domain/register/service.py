@@ -1,5 +1,5 @@
-from core.abstract.repository import AbstractRepository
-from modules.register.schemas import RegisterOut
+from core.abc.repository import AbstractRepository
+from domain.register.schemas import RegisterOut
 
 
 class RegisterService:

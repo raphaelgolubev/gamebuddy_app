@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from .schemas import RegisterIn, RegisterOut
 
-from core.dependencies import get_register_service
+from .container import get_register_service
 
 
 router = APIRouter(prefix="/register", tags=["Регистрация"])

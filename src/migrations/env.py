@@ -7,17 +7,17 @@ from alembic import context
 
 from src.core.config import settings
 
-from src.modules.user.models import User # noqa
-from src.modules.profile.models import Profile # noqa
+from entities.models.user import User # noqa
+# from src.modules.profile.models import Profile # noqa
 
-from src.core.database import Base
+from src.core.database.classes import Base
 
 # Это объект конфигурации Alembic, который предоставляет
 # доступ к значениям в используемом файле .ini.
 config = context.config
 
 # Переопределяем URL для подключения к базе данных
-config.set_main_option('sqlalchemy.url', settings.database.asyncpg_url + "?async_fallback=True")
+config.set_main_option('sqlalchemy.url', settings.database.url)  # + "?async_fallback=True")
 
 # Интерпретация файла конфигурации для логирования Python.
 # Эта строка настраивает логгеры.

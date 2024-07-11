@@ -1,13 +1,9 @@
 from datetime import datetime
-from sys import exc_info
 from typing import Annotated
 from uuid import UUID, uuid4
 
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, mapped_column
-
-from core.config import settings
 
 
 class Base(DeclarativeBase):
@@ -28,20 +24,3 @@ class Annotations:
             onupdate=text("TIMEZONE('utc', now())"),
         ),
     ]
-
-
-url = settings.database.asyncpg_url
-config = {
-    "echo": True,
-    "pool_size": 10,
-    "max_overflow": 10,
-}
-
-async_engine = create_async_engine(url, **config)
-async_session_factory = async_sessionmaker(async_engine)
-
-
-# async def create_tables():
-#     async with async_engine.begin() as conn:
-#         await conn.run_sync(Base.metadata.drop_all)
-#         await conn.run_sync(Base.metadata.create_all)

@@ -24,7 +24,6 @@ class GameBuddyApp:
             openapi_tags=AppMetadata.tags,
             version=settings.app.VERSION,
         )
-
         self.fastapi_app.include_router(main_router)
 
     def run(self, debug_mode=False):

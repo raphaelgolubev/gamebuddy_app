@@ -19,11 +19,10 @@ venv.bak/
 celerybeat-schedule
 celerybeat.pid
 
-# .vscode/
-
 # Local History for Visual Studio Code
 .history/
 
+# User related stuff
+.pytest_cache/
 logs/
-
 tests.py

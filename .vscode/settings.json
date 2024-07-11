@@ -23,6 +23,16 @@
         "reportUndefinedVariable": "warning",
         "reportGeneralTypeIssues": "warning",
         "reportAttributeAccessIssue": "warning",
-    }
+    },
+
+    // Python Tests
+    "python.testing.pytestArgs": [
+        "src"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+
+    "python.analysis.inlayHints.pytestParameters": true,
+    
 }
 

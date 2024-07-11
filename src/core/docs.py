@@ -56,7 +56,7 @@ class AppMetadata:
     """Метаданные для Swagger"""
 
     title = "GameBuddy"
-    summary = "Сервис поиска тиммейтов для сетевых видеоигр"
+    summary = "Сервис поиска тиммейтов для видеоигр по сети"
     description = """
 ## Содержание
 * [Регистрация](https://github.com/raphaelgolubev/gamebuddy_app/blob/main/docs/Register.md)
