@@ -14,9 +14,6 @@
 ```bash
 cd gamebuddy_app
 
-docker-compose up postgres
-
-alembic upgrade head
-
-python src/__main__.py --debug
+# Запустите Docker перед вызовом этого скрипта
+python start.py
 ```

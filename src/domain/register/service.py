@@ -35,3 +35,6 @@ class RegisterService:
                 raise UserAlreadyExistsError()
 
         return RegisterOut(id=id)
+
+    async def get_user(self, id: int) -> RegisterOut:
+        return await self.register_repo.get(id=id)
