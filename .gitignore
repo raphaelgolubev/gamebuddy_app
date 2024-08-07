@@ -8,6 +8,8 @@ __pycache__/
 
 # Environments
 .env
+backup.env
+.env.backup
 .venv
 env/
 venv/
